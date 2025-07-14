@@ -1,0 +1,96 @@
+services:
+  elm-registry:
+    build: ./elm-registry
+    ports:
+      - "8761:8761"
+    networks:
+      - elm-network
+
+  elm-config:
+    build: ./elm-config
+    ports:
+      - "8888:8888"
+    depends_on:
+      - elm-registry
+    networks:
+      - elm-network
+    volumes:
+      - ${HOME}/config-repo:/config-repo
+    environment:
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=file:///config-repo
+
+  elm-gateway:
+    build: ./elm-gateway
+    ports:
+      - "8090:8090"
+    depends_on:
+      - elm-registry
+      - elm-config
+    networks:
+      - elm-network
+
+  elm-user:
+    build: ./elm-user
+    ports:
+      - "8091:8091"
+    depends_on:
+      - elm-registry
+      - elm-config
+    networks:
+      - elm-network
+
+  elm-business:
+    build: ./elm-business
+    ports:
+      - "8092:8092"
+    depends_on:
+      - elm-registry
+      - elm-config
+    networks:
+      - elm-network
+
+  elm-order:
+    build: ./elm-order
+    ports:
+      - "8093:8093"
+    depends_on:
+      - elm-registry
+      - elm-config
+      - elm-user
+      - elm-business
+    networks:
+      - elm-network
+
+  elm-delivery:
+    build: ./elm-delivery
+    ports:
+      - "8094:8094"
+    depends_on:
+      - elm-registry
+      - elm-config
+    networks:
+      - elm-network
+
+  elm-payment:
+    build: ./elm-payment
+    ports:
+      - "8095:8095"
+    depends_on:
+      - elm-registry
+      - elm-config
+    networks:
+      - elm-network
+
+  elm-rating:
+    build: ./elm-rating
+    ports:
+      - "8096:8096"
+    depends_on:
+      - elm-registry
+      - elm-config
+    networks:
+      - elm-network
+
+networks:
+  elm-network:
+    driver: bridge 

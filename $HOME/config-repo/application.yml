@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: common-config
+
+jwt:
+  secret: elm-cloud-secret-key-for-jwt-token-generation-and-validation
+  expiration: 86400000  # 24 hours
+
+logging:
+  level:
+    root: INFO
+    yun.edu: DEBUG 

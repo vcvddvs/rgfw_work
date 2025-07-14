@@ -1,0 +1,58 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: elm-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: elm-user
+          uri: lb://elm-user
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix=0
+        - id: elm-business
+          uri: lb://elm-business
+          predicates:
+            - Path=/business/**,/food/**
+          filters:
+            - StripPrefix=0
+        - id: elm-order
+          uri: lb://elm-order
+          predicates:
+            - Path=/orders/**,/cart/**
+          filters:
+            - StripPrefix=0
+        - id: elm-delivery
+          uri: lb://elm-delivery
+          predicates:
+            - Path=/deliveryAddress/**
+          filters:
+            - StripPrefix=0
+        - id: elm-payment
+          uri: lb://elm-payment
+          predicates:
+            - Path=/payment/**
+          filters:
+            - StripPrefix=0
+        - id: elm-rating
+          uri: lb://elm-rating
+          predicates:
+            - Path=/rating/**
+          filters:
+            - StripPrefix=0
+
+# CORS配置
+cors:
+  allowed-origins: "*"
+  allowed-methods: "*"
+  allowed-headers: "*"
+  exposed-headers: "Authorization,Link,X-Total-Count"
+  allow-credentials: true
+  max-age: 1800 

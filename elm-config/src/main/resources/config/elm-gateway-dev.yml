@@ -1,0 +1,48 @@
+﻿server:
+  port: 8082
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: elm-user
+          uri: lb://elm-user
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix=0
+        - id: elm-business
+          uri: lb://elm-business
+          predicates:
+            - Path=/business/**, /food/**
+          filters:
+            - StripPrefix=0
+        - id: elm-order
+          uri: lb://elm-order
+          predicates:
+            - Path=/orders/**, /cart/**
+          filters:
+            - StripPrefix=0
+        - id: elm-delivery
+          uri: lb://elm-delivery
+          predicates:
+            - Path=/deliveryAddress/**
+          filters:
+            - StripPrefix=0
+        - id: elm-payment
+          uri: lb://elm-payment
+          predicates:
+            - Path=/payment/**
+          filters:
+            - StripPrefix=0
+        - id: elm-rating
+          uri: lb://elm-rating
+          predicates:
+            - Path=/rating/**
+          filters:
+            - StripPrefix=0
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8080/eureka/ 

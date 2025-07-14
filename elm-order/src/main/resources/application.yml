@@ -1,0 +1,70 @@
+spring:
+  application:
+    name: elm-order
+  # 禁用配置中心，直接使用本地配置
+  cloud:
+    config:
+      enabled: false
+  # 数据库配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/elm?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  main:
+    allow-bean-definition-overriding: true
+
+server:
+  port: 8093
+
+# JWT配置
+jwt:
+  secret: elm-cloud-secure-jwt-secret-key-with-sufficient-length-for-hs256-algorithm
+  expiration: 86400000  # 24小时
+
+# MyBatis Plus配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: yun.edu.order.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+  circuitbreaker:
+    enabled: true
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        permittedNumberOfCallsInHalfOpenState: 3
+    instances:
+      orderService:
+        baseConfig: default
+  retry:
+    configs:
+      default:
+        maxAttempts: 3
+        waitDuration: 1000
+    instances:
+      orderService:
+        baseConfig: default
+
+logging:
+  level:
+    yun.edu.order: debug 

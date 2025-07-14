@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: elm-user
+  # 禁用配置中心，直接使用本地配置
+  cloud:
+    config:
+      enabled: false
+  # 数据库配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/elm?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+
+server:
+  port: 8091
+
+# 添加日志配置
+logging:
+  level:
+    root: INFO
+    yun.edu.user: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.cloud: DEBUG
+
+# JWT配置
+jwt:
+  secret: elm-cloud-secure-jwt-secret-key-with-sufficient-length-for-hs256-algorithm
+  expiration: 86400000  # 24小时
+
+# MyBatis Plus配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: yun.edu.user.entity
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    registry-fetch-interval-seconds: 3  # 缩短服务列表刷新间隔
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5  # 心跳间隔
+    lease-expiration-duration-in-seconds: 10  # 续约到期时间
+    instance-id: ${spring.cloud.client.ip-address}:${server.port} 

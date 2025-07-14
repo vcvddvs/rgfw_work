@@ -1,0 +1,31 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: elm-payment
+  datasource:
+    url: jdbc:mysql://localhost:3306/elm?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: yun.edu.payment.pojo
+
+# 支付相关配置
+payment:
+  alipay:
+    app-id: 2021000000000000
+    merchant-private-key: your-private-key
+    alipay-public-key: alipay-public-key
+    notify-url: http://localhost:8082/payment/notify/alipay
+    return-url: http://localhost:8082/payment/return/alipay
+    gateway-url: https://openapi.alipaydev.com/gateway.do
+  wechat:
+    app-id: wx123456789
+    mch-id: 1234567890
+    mch-key: your-mch-key
+    notify-url: http://localhost:8082/payment/notify/wechat 
